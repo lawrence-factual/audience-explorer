@@ -90,7 +90,10 @@ def extract_country(path: str) -> str:
 
 
 def extract_tags(path: str) -> list:
-    tags = path.split('>')[2:-1]
+    if extract_country(path) == 'US':
+        tags = path.split('>')[2:-1]
+    else:
+        tags = path.split('>')[3:-1]
     tags = [tag.strip().replace('&', 'and') for tag in tags]
     return tags
 
@@ -98,8 +101,3 @@ def extract_tags(path: str) -> list:
 if __name__ == '__main__':
     segments_df = read_standard_taxonomy()
     segments_df.reset_index().to_json(OUTPUT_PATH, orient='records')
-
-    all_tags = set()
-    for tags in segments_df['tags'].values:
-        all_tags |= {tag.strip() for tag in tags}
-    print(all_tags)

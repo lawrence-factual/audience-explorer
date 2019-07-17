@@ -237,6 +237,18 @@ class App extends React.Component {
         render: text => <Text code>{text}</Text>
       },
       {
+        title: "Segment",
+        dataIndex: "name",
+        key: "name",
+        render: (text, record) => (
+          <>
+            <Text strong>{text}</Text>
+            <br />
+            <Text type="secondary">{record.description}</Text>
+          </>
+        )
+      },
+      {
         title: "Country",
         dataIndex: "country",
         key: "country",
@@ -249,24 +261,6 @@ class App extends React.Component {
           </Tag>
         )
       },
-      {
-        title: "",
-        dataIndex: "description",
-        key: "description",
-        width: 30,
-        render: (text, record) => (
-          <Tooltip title={record.description}>
-            <Icon type="info-circle" />
-          </Tooltip>
-        )
-      },
-      {
-        title: "Segment",
-        dataIndex: "name",
-        key: "name",
-        render: (text, record) => <Text strong>{text}</Text>
-      },
-
       {
         title: "Vertical",
         dataIndex: "vertical",
@@ -310,9 +304,14 @@ class App extends React.Component {
               {platform.google_id && (
                 <Tooltip
                   title={
-                    <Text copyable style={{ color: "white" }}>
-                      {platform.google_id}
-                    </Text>
+                    <>
+                      <Text strong style={{ color: "white" }}>
+                        ID:{" "}
+                      </Text>
+                      <Text copyable style={{ color: "white" }}>
+                        {platform.google_id}
+                      </Text>
+                    </>
                   }
                 >
                   <Tag color="green">Google</Tag>
@@ -323,9 +322,14 @@ class App extends React.Component {
               {platform.centro && (
                 <Tooltip
                   title={
-                    <Text copyable style={{ color: "white" }}>
-                      {platform.centro}
-                    </Text>
+                    <>
+                      <Text strong style={{ color: "white" }}>
+                        ID:{" "}
+                      </Text>
+                      <Text copyable style={{ color: "white" }}>
+                        {platform.centro}
+                      </Text>
+                    </>
                   }
                 >
                   <Tag color="orange">Centro</Tag>
@@ -336,9 +340,14 @@ class App extends React.Component {
               {platform.ttd && (
                 <Tooltip
                   title={
-                    <Text copyable style={{ color: "white" }}>
-                      {platform.ttd}
-                    </Text>
+                    <>
+                      <Text strong style={{ color: "white" }}>
+                        ID:{" "}
+                      </Text>
+                      <Text copyable style={{ color: "white" }}>
+                        {platform.ttd}
+                      </Text>
+                    </>
                   }
                 >
                   <Tag color="blue">The Trade Desk</Tag>

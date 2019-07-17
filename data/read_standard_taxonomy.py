@@ -2,13 +2,12 @@ import pandas as pd
 from datetime import date
 
 COUNTRIES = ['Japan', 'Australia', 'Hong Kong', 'Singapore']
+INPUT_PATH = "Standard Taxonomy Reach by Platform (Q3 2019).xlsx"
+OUTPUT_PATH = "../src/segments.json"
 
 
 def read_standard_taxonomy() -> pd.DataFrame:
-    dfs = pd.read_excel(
-        io="~/code/segment/data/Standard Taxonomy Reach by Platform (Q3 2019).xlsx",
-        sheet_name=['Google', 'Centro', 'TTD']
-    )
+    dfs = pd.read_excel(io=INPUT_PATH, sheet_name=['Google', 'Centro', 'TTD'])
     google_df = read_standard_taxonomy_reach_google(dfs['Google'])
     centro_df = read_standard_taxonomy_reach_centro(dfs['Centro'])
     ttd_df = read_standard_taxonomy_reach_ttd(dfs['TTD'])
@@ -98,5 +97,9 @@ def extract_tags(path: str) -> list:
 
 if __name__ == '__main__':
     segments_df = read_standard_taxonomy()
-    segments_df.reset_index().to_json('/Users/michaelv/code/segment/data/segments.json',
-                                      orient='records')
+    segments_df.reset_index().to_json(OUTPUT_PATH, orient='records')
+
+    all_tags = set()
+    for tags in segments_df['tags'].values:
+        all_tags |= {tag.strip() for tag in tags}
+    print(all_tags)

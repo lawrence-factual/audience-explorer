@@ -31,10 +31,14 @@ body {
 }
 
 .App-logo {
-  height: 80px;
+  height: 60px;
   pointer-events: none;
   margin-bottom: 20px;
   margin-top: 24px;
+}
+
+.ant-layout-footer {
+  padding-top: 0;
 }
 
 .App-header {

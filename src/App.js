@@ -1,11 +1,21 @@
 import React from "react";
 import "./App.css";
 import logo from "./logo.svg";
-import { Table, Tag, Layout, Input, Icon, Button, Typography } from "antd";
+import {
+  Table,
+  Tag,
+  Layout,
+  Input,
+  Icon,
+  Button,
+  Typography,
+  Row,
+  Col
+} from "antd";
 
 const { Title, Paragraph, Text } = Typography;
 
-const { Header, Content } = Layout;
+const { Header, Content, Footer } = Layout;
 
 let segments = require("./segments.json");
 
@@ -472,31 +482,100 @@ class App extends React.Component {
           <Header />
           <Layout>
             <Content>
-              <div id="title">
-                <img src={logo} className="App-logo" alt="logo" />
-
-                <Paragraph>
-                  Factual Audience lets you reach consumers based on their
-                  real-world behavior using best-in-class location data - so you
-                  reach the right consumers with the right message, every time.{" "}
-                  <br />
-                  Use this tool to discover Factual’s 1000+ Ready-to-Use
-                  Audiences designed by our team of location experts - available
-                  in your favorite DSP, DMP, or ad buying platform.
-                </Paragraph>
-              </div>
+              <Row>
+                <a href="https://www.factual.com/">
+                  <Col span={4}>
+                    <img src={logo} className="App-logo" alt="logo" />
+                  </Col>
+                </a>
+                <Col span={12} style={{ paddingTop: 18 }}>
+                  <Title level={2}>Audience Explorer</Title>
+                  <Text>
+                    Factual Audience lets you reach consumers based on their
+                    real-world behavior using best-in-class location data - so
+                    you reach the right consumers with the right message, every
+                    time. <br />
+                    Use this tool to discover Factual’s 1000+ Ready-to-Use
+                    Audiences designed by our team of location experts -
+                    available in your favorite DSP, DMP, or ad buying platform.
+                  </Text>
+                </Col>
+                <Col span={4} />
+                <Col span={4} style={{ textAlign: "center", paddingTop: 18 }}>
+                  <div
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.6)",
+                      padding: 12,
+                      borderRadius: 4
+                    }}
+                  >
+                    <Text type="secondary">
+                      Interested in exploring a segment or creating your own
+                      custom segment?
+                    </Text>
+                    <br />
+                    <br />
+                    <a
+                      href="https://www.factual.com/contactus/"
+                      target="_blank"
+                    >
+                      <Button size="small">Contact Factual</Button>
+                    </a>
+                  </div>
+                </Col>
+              </Row>
 
               <Table
                 size="large"
                 //bordered
                 //rowSelection={this.rowSelection()}
-                scroll={{ y: 700 }}
+                scroll={{ y: 600 }}
                 columns={columns}
                 dataSource={segments}
                 onChange={this.handleChange}
                 pagination={{ pageSize: 99, position: "top" }}
               />
             </Content>
+            <Footer>
+              <Row>
+                <Col span={12}>
+                  <Text>
+                    <a href="https://www.factual.com/privacy/">Privacy</a>
+                  </Text>{" "}
+                  |
+                  <Text>
+                    {" "}
+                    <a href="https://www.factual.com/privacy/#section-9">
+                      Opt Out
+                    </a>
+                  </Text>{" "}
+                  |
+                  <Text>
+                    {" "}
+                    <a href="https://www.factual.com/terms-of-service/">
+                      Terms of Service
+                    </a>
+                  </Text>{" "}
+                  |
+                  <Text>
+                    {" "}
+                    <a href="https://www.factual.com/trademarks/">Trademarks</a>
+                  </Text>{" "}
+                  |
+                  <Text>
+                    {" "}
+                    <a href="https://www.factual.com/cookie-declaration/">
+                      EEA Cookie Policy
+                    </a>
+                  </Text>
+                </Col>
+                <Col span={12} style={{ textAlign: "right" }}>
+                  <Text disabled>
+                    1999 Ave of the Stars, Los Angeles, CA 90067
+                  </Text>
+                </Col>
+              </Row>
+            </Footer>
           </Layout>
         </Layout>
       </div>

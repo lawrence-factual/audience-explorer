@@ -4,6 +4,10 @@
   text-align: left;
 }
 
+body {
+  background-color: #f2f4f6;
+}
+
 #title {
   position: absolute;
 }
@@ -15,6 +19,10 @@
 .ant-checkbox-group-item {
   display: block;
   margin-right: 0;
+}
+
+.ant-table-tbody {
+  background-color: #fff;
 }
 
 .App-logo {

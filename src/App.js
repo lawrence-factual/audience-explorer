@@ -227,7 +227,7 @@ class App extends React.Component {
           ref={node => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Search`}
           value={selectedKeys[0]}
           onChange={e =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -308,6 +308,14 @@ class App extends React.Component {
         ...this.getColumnSearchProps("name")
       },
       {
+        title: "Reach",
+        dataIndex: "reach",
+        key: "reach",
+        width: 140,
+        sorter: (a, b) => a.reach - b.reach,
+        render: num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+      },
+      {
         title: "Country",
         dataIndex: "country",
         key: "country",
@@ -327,7 +335,7 @@ class App extends React.Component {
         width: 200,
         filters: verticals,
         onFilter: (value, record) => record.vertical.indexOf(value) === 0,
-        render: (text, record) => <Text>{text}</Text>
+        render: (text, record) => <Text strong>{text}</Text>
       },
       {
         title: "Tags",
@@ -348,18 +356,13 @@ class App extends React.Component {
         render: (tags, record) => (
           <>
             {tags.map((tag, i) => (
-              <Tag key={i}>{tag}</Tag>
+              <Text key={i} type="secondary" style={{ wordWrap: "break-word" }}>
+                {tag}
+                <br />
+              </Text>
             ))}
           </>
         )
-      },
-      {
-        title: "Reach",
-        dataIndex: "reach",
-        key: "reach",
-        width: 200,
-        sorter: (a, b) => a.reach - b.reach,
-        render: num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
       },
       {
         title: "Platform",
@@ -370,57 +373,30 @@ class App extends React.Component {
           return (
             <>
               {platform.google_id && (
-                <Tooltip
-                  title={
-                    <>
-                      <Text strong style={{ color: "white" }}>
-                        ID:{" "}
-                      </Text>
-                      <Text copyable style={{ color: "white" }}>
-                        {platform.google_id}
-                      </Text>
-                    </>
-                  }
-                >
-                  <Tag color="green">Google</Tag>
+                <>
+                  <Tag color="green">
+                    Google: <Text copyable>{platform.google_id}</Text>
+                  </Tag>
                   <br />
-                </Tooltip>
+                </>
               )}
 
               {platform.centro && (
-                <Tooltip
-                  title={
-                    <>
-                      <Text strong style={{ color: "white" }}>
-                        ID:{" "}
-                      </Text>
-                      <Text copyable style={{ color: "white" }}>
-                        {platform.centro}
-                      </Text>
-                    </>
-                  }
-                >
-                  <Tag color="orange">Centro</Tag>
+                <>
+                  <Tag color="orange">
+                    Centro: <Text copyable>{platform.centro}</Text>
+                  </Tag>
                   <br />
-                </Tooltip>
+                </>
               )}
 
               {platform.ttd && (
-                <Tooltip
-                  title={
-                    <>
-                      <Text strong style={{ color: "white" }}>
-                        ID:{" "}
-                      </Text>
-                      <Text copyable style={{ color: "white" }}>
-                        {platform.ttd}
-                      </Text>
-                    </>
-                  }
-                >
-                  <Tag color="blue">The Trade Desk</Tag>
+                <>
+                  <Tag color="blue">
+                    TTD: <Text copyable>{platform.ttd}</Text>
+                  </Tag>
                   <br />
-                </Tooltip>
+                </>
               )}
             </>
           );
@@ -431,7 +407,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <Layout>
-          <Header>header</Header>
+          <Header>
+            <Text strong style={{ color: "white" }}>
+              Factual
+            </Text>
+          </Header>
           <Layout>
             <Content>
               <div id="title">
@@ -439,7 +419,7 @@ class App extends React.Component {
               </div>
 
               <Table
-                size="middle"
+                size="large"
                 //bordered
                 //rowSelection={this.rowSelection()}
                 scroll={{ y: 800 }}

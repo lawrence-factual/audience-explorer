@@ -276,7 +276,16 @@ class App extends React.Component {
         key: "tags",
         width: 200,
         filters: tags,
-        onFilter: (value, record) => record.tags.indexOf(value) === 0,
+        onFilter: (value, record) => {
+          var keep = false;
+          record.tags.map(item => {
+            if (item.indexOf(value) === 0) {
+              keep = true;
+            }
+          });
+          return keep;
+        },
+
         render: (tags, record) => (
           <>
             {tags.map((tag, i) => (
@@ -372,7 +381,6 @@ class App extends React.Component {
                 <Col span={4}>
                   <Search
                     placeholder="Search via name, ID, etc"
-                    onSearch={value => console.log(value)}
                     style={{ width: 400 }}
                   />
                 </Col>

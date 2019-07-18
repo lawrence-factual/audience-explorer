@@ -2,12 +2,33 @@ import pandas as pd
 from datetime import date
 
 COUNTRIES = ['Japan', 'Australia', 'Hong Kong', 'Singapore']
-INPUT_PATH = "Taxonomy for Hackathon.xlsx"
+INPUT_PATH_1 = "Taxonomy for Hackathon.xlsx"
+INPUT_PATH_2 = "taxonomy_structure.tsv"
 OUTPUT_PATH = "../src/segments.json"
 
 
-def read_standard_taxonomy() -> pd.DataFrame:
-    dfs = pd.read_excel(io=INPUT_PATH, sheet_name=['Google', 'Centro', 'TTD'])
+def get_segment_tags() -> pd.DataFrame:
+    raw_df = pd.read_csv(INPUT_PATH_2, sep='\t')
+    clean_df = raw_df[['Targeting Code', 'Level3']]
+    clean_df = clean_df.rename(
+        columns={'Targeting Code': 'segment_id', 'Level3': 'tag'})
+    col_map = {
+        'Brand Shoppers': 'Chain',
+        'Place Category Visitors': 'Category',
+        'Behavioral - Food and Beverage': 'Behavioral',
+        'Behavioral - Lifestyle and Lifestage': 'Behavioral',
+        'Behavioral - Seasonal': 'Behavioral',
+        'Behavioral - Travel and Transportation': 'Behavioral',
+        'Behavioral - Auto': 'Behavioral',
+        'Behavioral - Retail': 'Behavioral',
+    }
+    clean_df['tag'] = clean_df['tag'].replace(col_map)
+    clean_df = clean_df.set_index('segment_id')
+    return clean_df
+
+
+def get_segment_taxonomy() -> pd.DataFrame:
+    dfs = pd.read_excel(io=INPUT_PATH_1, sheet_name=['Google', 'Centro', 'TTD'])
     google_df = read_standard_taxonomy_reach_google(dfs['Google'])
     centro_df = read_standard_taxonomy_reach_centro(dfs['Centro'])
     ttd_df = read_standard_taxonomy_reach_ttd(dfs['TTD'])
@@ -38,12 +59,16 @@ def read_standard_taxonomy_reach_google(raw_df: pd.DataFrame) -> pd.DataFrame:
     clean_df['name'] = raw_df['Segment Name'].apply(extract_name)
     clean_df['country'] = raw_df['Segment Name'].apply(extract_country)
     clean_df['vertical'] = raw_df['Segment Name'].apply(extract_vertical)
-    clean_df['tags'] = raw_df['Segment Name'].apply(extract_tags)
-    clean_df['description'] = raw_df['Description']
+    clean_df['description'] = raw_df.apply(extract_description, axis=1)
     clean_df['reach'] = raw_df['Reach (Jul 2019)']
     clean_df['last_updated'] = date.today()
     clean_df = clean_df.set_index('segment_id')
     return clean_df
+
+
+def extract_description(row: pd.Series) -> str:
+    description = row['Description'] + '\n' + extract_tags(row['Segment Name'])
+    return description
 
 
 def read_standard_taxonomy_reach_centro(raw_df: pd.DataFrame) -> pd.DataFrame:
@@ -89,15 +114,18 @@ def extract_country(path: str) -> str:
     return country
 
 
-def extract_tags(path: str) -> list:
+def extract_tags(path: str) -> str:
     if extract_country(path) == 'US':
         tags = path.split('>')[2:-1]
     else:
         tags = path.split('>')[3:-1]
     tags = [tag.strip().replace('&', 'and') for tag in tags]
-    return tags
+    clean_tags = " > ".join(tags)
+    return clean_tags
 
 
 if __name__ == '__main__':
-    segments_df = read_standard_taxonomy()
+    taxonomy_df = get_segment_taxonomy()
+    tags_df = get_segment_tags()
+    segments_df = taxonomy_df.join(tags_df)
     segments_df.reset_index().to_json(OUTPUT_PATH, orient='records')

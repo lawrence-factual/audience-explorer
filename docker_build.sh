@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-docker build . -t registry.prod.factual.com/segments:latest
-docker push registry.prod.factual.com/segments
+docker build . -t registry.prod.factual.com/audience-explorer:latest
+docker push registry.prod.factual.com/audience-explorer

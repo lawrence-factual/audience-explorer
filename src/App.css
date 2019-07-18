@@ -4,6 +4,10 @@
   text-align: left;
 }
 
+#title {
+  position: absolute;
+}
+
 .ant-layout-content {
   padding: 24px;
 }

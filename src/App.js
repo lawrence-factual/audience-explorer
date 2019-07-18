@@ -29,7 +29,6 @@ const tags = [
   { text: "Age", value: "Age" },
   { text: "Amusement and Theme Parks", value: "Amusement and Theme Parks" },
   { text: "Arts, Crafts and Fabric", value: "Arts, Crafts and Fabric" },
-  { text: "Automotive", value: "Automotive" },
   { text: "Baby and Children's Goods", value: "Baby and Children's Goods" },
   { text: "Banks", value: "Banks" },
   {
@@ -41,7 +40,6 @@ const tags = [
   { text: "Big Box Stores", value: "Big Box Stores" },
   { text: "Bookstores", value: "Bookstores" },
   { text: "Brokerage and Investment", value: "Brokerage and Investment" },
-  { text: "Business and Finance", value: "Business and Finance" },
   {
     text: "Cafes, Coffee and Tea Houses",
     value: "Cafes, Coffee and Tea Houses"
@@ -87,7 +85,6 @@ const tags = [
     value: "Fast Food and QSR Diners (Quick Serve Restaurant Diner)"
   },
   { text: "Financial Services", value: "Financial Services" },
-  { text: "Food and Dining", value: "Food and Dining" },
   { text: "Food and Beverage", value: "Food and Beverage" },
   { text: "Furniture and Home Decor", value: "Furniture and Home Decor" },
   { text: "Games and Gaming", value: "Games and Gaming" },
@@ -109,7 +106,6 @@ const tags = [
   { text: "Jewelry and Watches", value: "Jewelry and Watches" },
   { text: "Landmarks", value: "Landmarks" },
   { text: "Legal", value: "Legal" },
-  { text: "Lifestyle and Lifestage", value: "Lifestyle and Lifestage" },
   { text: "Lodging", value: "Lodging" },
   { text: "Mattresses", value: "Mattresses" },
   { text: "Media and Entertainment", value: "Media and Entertainment" },
@@ -139,7 +135,6 @@ const tags = [
   { text: "Real Estate", value: "Real Estate" },
   { text: "Real Estate Agents", value: "Real Estate Agents" },
   { text: "Restaurants", value: "Restaurants" },
-  { text: "Retail", value: "Retail" },
   { text: "Skin Care and Body Care", value: "Skin Care and Body Care" },
   {
     text: "Supermarkets and Grocery Stores (Groceries)",
@@ -150,7 +145,6 @@ const tags = [
   { text: "Tourism", value: "Tourism" },
   { text: "Transportation", value: "Transportation" },
   { text: "Transportation Hubs", value: "Transportation Hubs" },
-  { text: "Travel", value: "Travel" },
   { text: "US Congressional Districts", value: "US Congressional Districts" },
   { text: "Used Car Dealerships", value: "Used Car Dealerships" },
   { text: "Vitamins and Supplements", value: "Vitamins and Supplements" },
@@ -221,6 +215,69 @@ class App extends React.Component {
     });
   };
 
+  getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={node => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(selectedKeys, confirm)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: filtered => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    }
+  });
+
+  handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    this.setState({ searchText: selectedKeys[0] });
+  };
+
+  handleReset = clearFilters => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
@@ -234,7 +291,8 @@ class App extends React.Component {
         width: 80,
         sorter: (a, b) => a.segment_id.length - b.segment_id.length,
         defaultSortOrder: "ascend",
-        render: text => <Text code>{text}</Text>
+        render: text => <Text code>{text}</Text>,
+        ...this.getColumnSearchProps("segment_id")
       },
       {
         title: "Segment",
@@ -246,7 +304,8 @@ class App extends React.Component {
             <br />
             <Text type="secondary">{record.description}</Text>
           </>
-        )
+        ),
+        ...this.getColumnSearchProps("name")
       },
       {
         title: "Country",
@@ -276,7 +335,16 @@ class App extends React.Component {
         key: "tags",
         width: 200,
         filters: tags,
-        onFilter: (value, record) => record.tags.indexOf(value) === 0,
+        onFilter: (value, record) => {
+          var keep = false;
+          record.tags.map(item => {
+            if (item.indexOf(value) === 0) {
+              keep = true;
+            }
+          });
+          return keep;
+        },
+
         render: (tags, record) => (
           <>
             {tags.map((tag, i) => (
@@ -366,25 +434,18 @@ class App extends React.Component {
           <Header>header</Header>
           <Layout>
             <Content>
-              <Title level={2}>Factual Data Dictionary</Title>
-
-              <Row>
-                <Col span={4}>
-                  <Search
-                    placeholder="Search via name, ID, etc"
-                    onSearch={value => console.log(value)}
-                    style={{ width: 400 }}
-                  />
-                </Col>
-              </Row>
+              <div id="title">
+                <Title level={2}>Factual Data Dictionary</Title>
+              </div>
 
               <Table
                 size="middle"
                 //bordered
                 //rowSelection={this.rowSelection()}
+                scroll={{ y: 800 }}
                 columns={columns}
                 dataSource={segments}
-                pagination={{ pageSize: 20, position: "both" }}
+                pagination={{ pageSize: 50, position: "top" }}
               />
             </Content>
           </Layout>

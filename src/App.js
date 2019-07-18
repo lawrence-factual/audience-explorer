@@ -29,7 +29,6 @@ const tags = [
   { text: "Age", value: "Age" },
   { text: "Amusement and Theme Parks", value: "Amusement and Theme Parks" },
   { text: "Arts, Crafts and Fabric", value: "Arts, Crafts and Fabric" },
-  { text: "Automotive", value: "Automotive" },
   { text: "Baby and Children's Goods", value: "Baby and Children's Goods" },
   { text: "Banks", value: "Banks" },
   {
@@ -41,7 +40,6 @@ const tags = [
   { text: "Big Box Stores", value: "Big Box Stores" },
   { text: "Bookstores", value: "Bookstores" },
   { text: "Brokerage and Investment", value: "Brokerage and Investment" },
-  { text: "Business and Finance", value: "Business and Finance" },
   {
     text: "Cafes, Coffee and Tea Houses",
     value: "Cafes, Coffee and Tea Houses"
@@ -87,7 +85,6 @@ const tags = [
     value: "Fast Food and QSR Diners (Quick Serve Restaurant Diner)"
   },
   { text: "Financial Services", value: "Financial Services" },
-  { text: "Food and Dining", value: "Food and Dining" },
   { text: "Food and Beverage", value: "Food and Beverage" },
   { text: "Furniture and Home Decor", value: "Furniture and Home Decor" },
   { text: "Games and Gaming", value: "Games and Gaming" },
@@ -109,7 +106,6 @@ const tags = [
   { text: "Jewelry and Watches", value: "Jewelry and Watches" },
   { text: "Landmarks", value: "Landmarks" },
   { text: "Legal", value: "Legal" },
-  { text: "Lifestyle and Lifestage", value: "Lifestyle and Lifestage" },
   { text: "Lodging", value: "Lodging" },
   { text: "Mattresses", value: "Mattresses" },
   { text: "Media and Entertainment", value: "Media and Entertainment" },
@@ -139,7 +135,6 @@ const tags = [
   { text: "Real Estate", value: "Real Estate" },
   { text: "Real Estate Agents", value: "Real Estate Agents" },
   { text: "Restaurants", value: "Restaurants" },
-  { text: "Retail", value: "Retail" },
   { text: "Skin Care and Body Care", value: "Skin Care and Body Care" },
   {
     text: "Supermarkets and Grocery Stores (Groceries)",
@@ -150,7 +145,6 @@ const tags = [
   { text: "Tourism", value: "Tourism" },
   { text: "Transportation", value: "Transportation" },
   { text: "Transportation Hubs", value: "Transportation Hubs" },
-  { text: "Travel", value: "Travel" },
   { text: "US Congressional Districts", value: "US Congressional Districts" },
   { text: "Used Car Dealerships", value: "Used Car Dealerships" },
   { text: "Vitamins and Supplements", value: "Vitamins and Supplements" },

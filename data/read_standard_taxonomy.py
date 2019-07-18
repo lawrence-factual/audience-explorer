@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import date
 
 COUNTRIES = ['Japan', 'Australia', 'Hong Kong', 'Singapore']
-INPUT_PATH = "Standard Taxonomy Reach by Platform (Q3 2019).xlsx"
+INPUT_PATH = "Taxonomy for Hackathon.xlsx"
 OUTPUT_PATH = "../src/segments.json"
 
 

@@ -1,26 +1,11 @@
 import React from "react";
 import "./App.css";
-import {
-  Radio,
-  Table,
-  Tag,
-  Layout,
-  Checkbox,
-  Menu,
-  Dropdown,
-  Row,
-  Col,
-  Input,
-  Icon,
-  Tooltip,
-  Button,
-  Typography
-} from "antd";
+import logo from "./logo.svg";
+import { Table, Tag, Layout, Input, Icon, Button, Typography } from "antd";
 
 const { Title, Paragraph, Text } = Typography;
-const { Search } = Input;
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 let segments = require("./segments.json");
 
@@ -174,54 +159,90 @@ const verticals = [
   { text: "Demographic", value: "Demographic" },
   { text: "Political", value: "Political" }
 ];
-const platforms = [
-  { text: "Centro", value: "centro" },
-  { text: "Google", value: "google_id" },
-  { text: "The Trade Desk", value: "ttd" }
-];
 
-class App extends React.Component {
-  rowSelection = () => ({
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+var parsedURL = new URL(window.location.href);
+console.log(parsedURL);
+
+function addSearchParam(params) {
+  var url = new URL(window.location.href);
+  var searchParams = new URLSearchParams(url.search);
+
+  console.log(params[0] + ": " + params[1]);
+
+  if (params[0] === "name") {
+    if (searchParams.has("name")) {
+      searchParams.delete("name");
+      if (searchParams.get("name") != "") {
+        searchParams.append(params[0], params[1]);
+      }
+    } else {
+      searchParams.append(params[0], params[1]);
     }
-  });
+  } else if (params[0] === "segment_id") {
+    if (searchParams.has("segment_id")) {
+      searchParams.delete("segment_id");
+      if (searchParams.get("segment_id") != "") {
+        searchParams.append(params[0], params[1]);
+      }
+    } else {
+      searchParams.append(params[0], params[1]);
+    }
+  } else if (params[0] === "country") {
+    if (searchParams.has("country")) {
+      searchParams.delete("country");
+      if (searchParams.get("country") != "") {
+        searchParams.append(params[0], params[1]);
+      }
+    } else {
+      searchParams.append(params[0], params[1]);
+    }
+  } else if (params[0] === "vertical") {
+    if (searchParams.has("vertical")) {
+      searchParams.delete("vertical");
+      if (searchParams.get("vertical") != "") {
+        searchParams.append(params[0], params[1]);
+      }
+    } else {
+      searchParams.append(params[0], params[1]);
+    }
+  } else if (params[0] === "tags") {
+    if (searchParams.has("tags")) {
+      searchParams.delete("tags");
+      if (searchParams.get("tags") != "") {
+        searchParams.append(params[0], params[1]);
+      }
+    } else {
+      searchParams.append(params[0], params[1]);
+    }
+  } else {
+    searchParams.append(params[0], params[1]);
+  }
 
+  console.log(url);
+
+  window.history.replaceState(
+    {},
+    "",
+    `${window.location.pathname}?${searchParams}`
+  );
+}
+
+// APP STARTS HERE
+class App extends React.Component {
   state = {
     filteredInfo: null,
     sortedInfo: null
   };
 
-  handleChange = (pagination, filters, sorter) => {
-    console.log("Various parameters", pagination, filters, sorter);
-    this.setState({
-      filteredInfo: filters,
-      sortedInfo: sorter
-    });
-  };
-
-  clearFilters = () => {
-    this.setState({ filteredInfo: null });
-  };
-
-  clearAll = () => {
-    this.setState({
-      filteredInfo: null,
-      sortedInfo: null
-    });
+  handleReset = (dataIndex, setSelectedKeys, confirm) => {
+    confirm();
+    this.setState({ searchText: "", filteredInfo: {} });
+    setSelectedKeys([]);
+    window.history.pushState({}, "", window.location.origin);
   };
 
   getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={node => {
@@ -232,12 +253,14 @@ class App extends React.Component {
           onChange={e =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+          onPressEnter={() =>
+            this.handleSearch(dataIndex, selectedKeys, confirm)
+          }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm)}
+          onClick={() => this.handleSearch(dataIndex, selectedKeys, confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -245,7 +268,7 @@ class App extends React.Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleReset(clearFilters)}
+          onClick={() => this.handleReset(dataIndex, setSelectedKeys, confirm)}
           size="small"
           style={{ width: 90 }}
         >
@@ -268,27 +291,53 @@ class App extends React.Component {
     }
   });
 
-  handleSearch = (selectedKeys, confirm) => {
+  handleSearch = (dataIndex, selectedKeys, confirm) => {
     confirm();
+    console.log(selectedKeys[0]);
+    addSearchParam([dataIndex, selectedKeys[0]]);
     this.setState({ searchText: selectedKeys[0] });
   };
 
-  handleReset = clearFilters => {
-    clearFilters();
-    this.setState({ searchText: "" });
+  handleChange = (pagination, filters, sorter) => {
+    console.log("Various parameters", pagination, filters, sorter);
+    if (Object.keys(filters).length > 0) {
+      for (var filter in filters) {
+        console.log(filters);
+        console.log(filter);
+        addSearchParam([filter, filters[filter]]);
+      }
+    }
+    this.setState({
+      filteredInfo: filters,
+      sortedInfo: sorter
+    });
+  };
+
+  checkFilters = () => {
+    //console.log("loaded");
+    //this.handleChange();
+    var url = new URL(window.location.href);
+    var searchParams = new URLSearchParams(url.search);
+    if (searchParams.has("name")) {
+    }
   };
 
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
+    var url = new URL(window.location.href);
+    var searchParams = new URLSearchParams(url.search);
 
     const columns = [
       {
         title: "ID",
         dataIndex: "segment_id",
         key: "segment_id",
-        width: 80,
+        width: 120,
+        filteredValue: searchParams.get("segment_id")
+          ? [searchParams.get("segment_id")]
+          : undefined,
         sorter: (a, b) => a.segment_id.length - b.segment_id.length,
         defaultSortOrder: "ascend",
         render: text => <Text code>{text}</Text>,
@@ -298,6 +347,9 @@ class App extends React.Component {
         title: "Segment",
         dataIndex: "name",
         key: "name",
+        filteredValue: searchParams.get("name")
+          ? [searchParams.get("name")]
+          : undefined,
         render: (text, record) => (
           <>
             <Text strong>{text}</Text>
@@ -319,7 +371,10 @@ class App extends React.Component {
         title: "Country",
         dataIndex: "country",
         key: "country",
-        width: 100,
+        width: 120,
+        filteredValue: searchParams.get("country")
+          ? searchParams.get("country").split(",")
+          : undefined,
         filters: countries,
         onFilter: (value, record) => record.country.indexOf(value) === 0,
         render: text => (
@@ -332,15 +387,21 @@ class App extends React.Component {
         title: "Vertical",
         dataIndex: "vertical",
         key: "vertical",
+        filteredValue: searchParams.get("vertical")
+          ? searchParams.get("vertical").split(",")
+          : undefined,
         width: 200,
         filters: verticals,
         onFilter: (value, record) => record.vertical.indexOf(value) === 0,
-        render: (text, record) => <Text strong>{text}</Text>
+        render: text => <Text strong>{text}</Text>
       },
       {
         title: "Tags",
         dataIndex: "tags",
         key: "tags",
+        filteredValue: searchParams.get("tags")
+          ? searchParams.get("tags").split(",")
+          : undefined,
         width: 200,
         filters: tags,
         onFilter: (value, record) => {
@@ -406,26 +467,34 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        {this.checkFilters()}
         <Layout>
-          <Header>
-            <Text strong style={{ color: "white" }}>
-              Factual
-            </Text>
-          </Header>
+          <Header />
           <Layout>
             <Content>
               <div id="title">
-                <Title level={2}>Factual Data Dictionary</Title>
+                <img src={logo} className="App-logo" alt="logo" />
+
+                <Paragraph>
+                  Factual Audience lets you reach consumers based on their
+                  real-world behavior using best-in-class location data - so you
+                  reach the right consumers with the right message, every time.{" "}
+                  <br />
+                  Use this tool to discover Factual’s 1000+ Ready-to-Use
+                  Audiences designed by our team of location experts - available
+                  in your favorite DSP, DMP, or ad buying platform.
+                </Paragraph>
               </div>
 
               <Table
                 size="large"
                 //bordered
                 //rowSelection={this.rowSelection()}
-                scroll={{ y: 800 }}
+                scroll={{ y: 700 }}
                 columns={columns}
                 dataSource={segments}
-                pagination={{ pageSize: 50, position: "top" }}
+                onChange={this.handleChange}
+                pagination={{ pageSize: 99, position: "top" }}
               />
             </Content>
           </Layout>

@@ -225,7 +225,8 @@ class App extends React.Component {
         filteredValue: searchParams.get("segment_id")
           ? [searchParams.get("segment_id")]
           : undefined,
-        sorter: (a, b) => a.segment_id.length - b.segment_id.length,
+        sorter: (a, b) =>
+          a.segment_id.localeCompare(b.segment_id, "en", { numeric: true }),
         defaultSortOrder: "ascend",
         render: text => <Text code>{text}</Text>,
         ...this.getColumnSearchProps("segment_id")

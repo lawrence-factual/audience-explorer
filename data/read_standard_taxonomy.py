@@ -42,8 +42,7 @@ def read_standard_taxonomy_reach_google(raw_df: pd.DataFrame) -> pd.DataFrame:
     clean_df['segment_id'] = raw_df['Factual Segment ID']
     clean_df['google_id'] = raw_df['Google Segment ID']
     tags = raw_df['Segment Name'].str.split('>')
-    tags = tags.apply(lambda vals: [val.strip().replace('&', 'and') for val in
-                                    vals] if vals else None)
+    tags = tags.apply(lambda vals: [val.strip() for val in vals] if vals else None)
     tags = tags.apply(lambda vals: [val for val in vals if val not in SKIPPED_TAGS])
     clean_df['name'] = tags.apply(lambda vals: vals[-1])
     clean_df['country'] = tags.apply(

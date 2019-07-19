@@ -24,7 +24,7 @@ const tags = [
   { text: "Political", value: "Political" },
   { text: "Demographic", value: "Demographic" },
   { text: "Place Category", value: "Place Category" },
-  { text: "Behavioral", value: "Behavioral" },
+  { text: "Behavioral", value: "Behavioral" }
 ];
 
 const countries = [
@@ -36,11 +36,11 @@ const countries = [
 ];
 const verticals = [
   { text: "Automotive", value: "Automotive" },
-  { text: "Business & Finance", value: "Business & Finance" },
-  { text: "Media & Entertainment", value: "Media & Entertainment" },
-  { text: "Food & Dining", value: "Food & Dining" },
-  { text: "Health & Fitness", value: "Health & Fitness" },
-  { text: "Lifestyle & Lifestage", value: "Lifestyle & Lifestage" },
+  { text: "Business and Finance", value: "Business and Finance" },
+  { text: "Media and Entertainment", value: "Media and Entertainment" },
+  { text: "Food and Dining", value: "Food and Dining" },
+  { text: "Health and Fitness", value: "Health and Fitness" },
+  { text: "Lifestyle and Lifestage", value: "Lifestyle and Lifestage" },
   { text: "Retail", value: "Retail" },
   { text: "Travel", value: "Travel" },
   { text: "Demographic", value: "Demographic" },
@@ -239,7 +239,9 @@ class App extends React.Component {
           : undefined,
         render: (text, record) => (
           <>
-            <Text strong>{text}</Text>
+            <Text strong style={{ lineHeight: 2, fontSize: 16, color: "#111" }}>
+              {text}
+            </Text>
             <br />
             <Text>{record.description}</Text>
             <br />
@@ -279,7 +281,7 @@ class App extends React.Component {
         filteredValue: searchParams.get("vertical")
           ? searchParams.get("vertical").split(",")
           : undefined,
-        width: 200,
+        width: 160,
         filters: verticals,
         onFilter: (value, record) => record.vertical.indexOf(value) === 0,
         render: text => <Text strong>{text}</Text>
@@ -291,7 +293,7 @@ class App extends React.Component {
         filteredValue: searchParams.get("tags")
           ? searchParams.get("tags").split(",")
           : undefined,
-        width: 200,
+        width: 160,
         filters: tags,
         onFilter: (value, record) => {
           var keep = false;
@@ -361,26 +363,28 @@ class App extends React.Component {
           <Header />
           <Layout>
             <Content>
-              <Row>
+              <Row style={{ marginBottom: 16 }}>
                 <a href="https://www.factual.com/">
-                  <Col span={4}>
+                  <Col span={5}>
                     <img src={logo} className="App-logo" alt="logo" />
                   </Col>
                 </a>
-                <Col span={12} style={{ paddingTop: 18 }}>
-                  <Title level={2}>Audience Explorer</Title>
+                <Col span={1} />
+                <Col span={10} style={{ paddingTop: 18 }}>
+                  <Title level={4}>Audience Explorer</Title>
                   <Text>
                     Factual Audience lets you reach consumers based on their
                     real-world behavior using best-in-class location data - so
                     you reach the right consumers with the right message, every
                     time. <br />
+                    <br />
                     Use this tool to discover Factual’s 1000+ Ready-to-Use
                     Audiences designed by our team of location experts -
                     available in your favorite DSP, DMP, or ad buying platform.
                   </Text>
                 </Col>
-                <Col span={4} />
-                <Col span={4} style={{ textAlign: "center", paddingTop: 18 }}>
+                <Col span={2} />
+                <Col span={6} style={{ textAlign: "center", paddingTop: 18 }}>
                   <div
                     style={{
                       backgroundColor: "rgba(255,255,255,0.6)",
@@ -388,7 +392,7 @@ class App extends React.Component {
                       borderRadius: 4
                     }}
                   >
-                    <Text type="secondary">
+                    <Text>
                       Interested in exploring a segment or creating your own
                       custom segment?
                     </Text>
@@ -405,14 +409,15 @@ class App extends React.Component {
               </Row>
 
               <Table
-                size="large"
+                size="middle"
                 //bordered
                 //rowSelection={this.rowSelection()}
-                scroll={{ y: 600 }}
+                //scroll={{ y: "55vh" }}
+
                 columns={columns}
                 dataSource={segments}
                 onChange={this.handleChange}
-                pagination={{ pageSize: 99, position: "top" }}
+                pagination={{ pageSize: 15, position: "both" }}
               />
             </Content>
             <Footer>
@@ -449,7 +454,7 @@ class App extends React.Component {
                   </Text>
                 </Col>
                 <Col span={12} style={{ textAlign: "right" }}>
-                  <Text disabled>
+                  <Text type="secondary">
                     1999 Ave of the Stars, Los Angeles, CA 90067
                   </Text>
                 </Col>

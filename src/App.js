@@ -36,11 +36,11 @@ const countries = [
 ];
 const verticals = [
   { text: "Automotive", value: "Automotive" },
-  { text: "Business and Finance", value: "Business and Finance" },
-  { text: "Media and Entertainment", value: "Media and Entertainment" },
-  { text: "Food and Dining", value: "Food and Dining" },
-  { text: "Health and Fitness", value: "Health and Fitness" },
-  { text: "Lifestyle and Lifestage", value: "Lifestyle and Lifestage" },
+  { text: "Business & Finance", value: "Business & Finance" },
+  { text: "Media & Entertainment", value: "Media & Entertainment" },
+  { text: "Food & Dining", value: "Food & Dining" },
+  { text: "Health & Fitness", value: "Health & Fitness" },
+  { text: "Lifestyle & Lifestage", value: "Lifestyle & Lifestage" },
   { text: "Retail", value: "Retail" },
   { text: "Travel", value: "Travel" },
   { text: "Demographic", value: "Demographic" },
@@ -338,6 +338,14 @@ class App extends React.Component {
                 <>
                   <Tag color="orange">
                     Centro: <Text copyable>{platform.centro_id}</Text>
+                  </Tag>
+                  <br />
+                </>
+              )}
+                            {platform.mm_id && (
+                <>
+                  <Tag color="red">
+                    MM: <Text copyable>{platform.mm_id}</Text>
                   </Tag>
                   <br />
                 </>
